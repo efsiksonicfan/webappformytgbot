@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Оплата участі</title>
+<style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 30px; background: #f0f0f0; }
+    h1 { color: #4CAF50; }
+    .btn { 
+        display: block; width: 200px; margin: 15px auto; padding: 15px; font-size: 16px; 
+        border: none; border-radius: 8px; cursor: pointer; color: white;
+    }
+    #gpay { background: #4285F4; }
+    #applepay { background: #000000; }
+    #cardpay { background: #4CAF50; }
+    .note { font-size: 14px; color: #555; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h1>Оплата 40₴ для участі</h1>
+
+<button class="btn" id="gpay">💳 Оплатити через GPay</button>
+<button class="btn" id="applepay">🍎 Оплатити через Apple Pay</button>
+<button class="btn" id="cardpay">💳 Ввести картку вручну</button>
+
+<div class="note">
+    Після оплати натисніть кнопку "Я оплатив" у боті для підтвердження.
+</div>
+
+<script>
+    const paymentDetails = {
+        total: { label: 'Оплата участі', amount: { currency: 'UAH', value: '40.00' } }
+    };
+    const paymentOptions = { requestPayerName: true, requestPayerEmail: true };
+
+    document.getElementById('gpay').onclick = async () => {
+        try {
+            const request = new PaymentRequest([{ supportedMethods: 'https://google.com/pay' }], paymentDetails, paymentOptions);
+            const result = await request.show();
+            await result.complete('success');
+            alert('Оплата пройшла! Поверніться у бот і натисніть "Я оплатив"');
+        } catch (e) { alert('Оплата не вдалася або скасована'); }
+    };
+
+    document.getElementById('applepay').onclick = async () => {
+        try {
+            const request = new PaymentRequest([{ supportedMethods: 'https://apple.com/apple-pay' }], paymentDetails, paymentOptions);
+            const result = await request.show();
+            await result.complete('success');
+            alert('Оплата пройшла! Поверніться у бот і натисніть "Я оплатив"');
+        } catch (e) { alert('Оплата не вдалася або скасована'); }
+    };
+
+    document.getElementById('cardpay').onclick = () => {
+        const card = prompt('Введіть номер картки:');
+        if(card) alert('Дякуємо! Після оплати натисніть "Я оплатив" у боті.');
+    };
+</script>
+
+</body>
+</html>
